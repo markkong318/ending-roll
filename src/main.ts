@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import FontFaceObserver from 'fontfaceobserver';
+// import FontFaceObserver from 'fontfaceobserver';
 import gsap from 'gsap';
 import PixiPlugin from 'gsap/PixiPlugin';
 

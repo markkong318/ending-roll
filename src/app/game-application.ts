@@ -1,16 +1,22 @@
-import {GameView} from "./view/game-view";
-import {GameModel} from "./model/game-model";
-import {GameController} from "./controller/game-controller";
-import {Application} from "../framework/application"
-import {Size} from "../framework/size";
-import Bottle from "../framework/bottle";
+import * as PIXI from 'pixi.js';
+
+import {GameView} from './view/game-view';
+import {GameModel} from './model/game-model';
+import {GameController} from './controller/game-controller';
+import {Application} from '../framework/application';
+import Bottle from '../framework/bottle';
+import LayoutManager from '../framework/manager/layout-manager';
 import {Storage} from './storage/storage';
+import boy from '../../src/assets/images/boy.png';
+import soup from '../../src/assets/images/soup.png';
 
 export class GameApplication extends Application {
   private gameModel: GameModel;
   private gameController: GameController;
   private gameView: GameView;
   private storage: Storage;
+  private layoutManager: LayoutManager;
+  private sprite: PIXI.Sprite;
 
   constructor(options?) {
     super(options);
@@ -19,6 +25,8 @@ export class GameApplication extends Application {
 
   public preload(): void {
     this.loader
+      .add('boy', boy)
+      .add('soup', soup)
       .load((loader, resources) => {
         this.onAssetsLoaded();
       });
@@ -31,52 +39,27 @@ export class GameApplication extends Application {
   public initScene(): void {
     Bottle.set('renderer', this.renderer);
 
-
     this.gameModel = new GameModel();
     Bottle.set('gameModel', this.gameModel);
 
-    this.gameController = new GameController();
+    this.gameController = new GameController()
+    Bottle.set('gameController', this.gameController);
 
     this.storage = new Storage();
     Bottle.set('storage', this.storage);
 
-    const viewWidth = 480;
-    const viewHeight = this.getViewHeight(viewWidth);
-
     this.gameView = new GameView();
-    this.gameView.size = new Size(viewWidth, viewHeight);
-    this.gameView.init();
+    Bottle.set('gameView', this.gameView);
 
+    this.layoutManager = new LayoutManager(this.renderer, this.gameView);
+    this.layoutManager.setLandscape();
+
+    this.gameView.init();
     this.stage.addChild(this.gameView);
 
-    this.resizeView();
-  }
+    // this.sprite = new PIXI.Sprite(PIXI.Texture.from('boy'));
+    // this.gameView.addChild(this.sprite);
 
-  public getViewHeight(viewWidth) {
-    if (this.renderer.width > this.renderer.height) {
-      return 900;
-    } else {
-      return Math.floor(viewWidth * this.renderer.height / this.renderer.width);
-    }
-  }
-
-  public resizeView(): void {
-    if (this.renderer.width > this.renderer.height) {
-      const scale = Math.min(this.renderer.width / this.gameView.size.width, this.renderer.height / this.gameView.size.height) / this.renderer.resolution;
-
-      this.gameView.scale.x = scale;
-      this.gameView.scale.y = scale;
-
-      this.gameView.x = (this.renderer.width - this.gameView.size.width * scale * this.renderer.resolution) / 2 / this.renderer.resolution;
-      this.gameView.y = (this.renderer.height - this.gameView.size.height * scale * this.renderer.resolution) / 2 / this.renderer.resolution;
-    } else {
-      const scale = this.renderer.width / this.gameView.size.width / this.renderer.resolution;
-
-      this.gameView.scale.x = scale;
-      this.gameView.scale.y = scale;
-
-      this.gameView.x = 0;
-      this.gameView.y = (this.renderer.height - this.gameView.size.height * scale * this.renderer.resolution) / 2 / this.renderer.resolution;
-    }
+    console.log('hello game');
   }
 }
