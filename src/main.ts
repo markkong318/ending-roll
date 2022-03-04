@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-// import FontFaceObserver from 'fontfaceobserver';
+import FontFaceObserver from 'fontfaceobserver';
 import gsap from 'gsap';
 import PixiPlugin from 'gsap/PixiPlugin';
 
@@ -11,14 +11,12 @@ declare global {
   }
 }
 
-// var font = new FontFaceObserver('lato-light')
-// font.load()
-//   .then(() => (new FontFaceObserver('lato')).load())
-//   .then(() => (new FontFaceObserver('gravity')).load())
-  Promise.resolve().then(() => {
+var font = new FontFaceObserver('corporate-mincho-ver2')
+font.load(null, 50000)
+  .then(() => {
     window.PIXI = PIXI;
 
-    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 
     PixiPlugin.registerPIXI(PIXI);
     gsap.registerPlugin(PixiPlugin);

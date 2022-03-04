@@ -7,4 +7,8 @@ export class GameController extends Controller {
   constructor() {
     super();
   }
+
+  load() {
+
+  }
 }

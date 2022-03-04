@@ -36,4 +36,12 @@ export class GradientView extends View {
     this.sprite = PIXI.Sprite.from(canvas)
     this.addChild(this.sprite);
   }
+
+  show() {
+    this.sprite.visible = true;
+  }
+
+  hide() {
+    this.sprite.visible = false;
+  }
 }

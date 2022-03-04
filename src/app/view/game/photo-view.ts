@@ -3,11 +3,16 @@ import gsap from 'gsap';
 
 import {View} from '../../../framework/view';
 
+const POOL_SIZE = 2;
+const TRANSITION_TIME = 2;
+
 export class PhotoView extends View {
   private background: PIXI.Sprite;
-  private sprite: PIXI.Sprite;
+  private pool: PIXI.Sprite[];
   private ticker: PIXI.Ticker;
   private timeline: gsap.core.Timeline;
+
+  private idx: number = 0;
 
   constructor(timeline: gsap.core.Timeline) {
     super();
@@ -20,46 +25,52 @@ export class PhotoView extends View {
     this.background.height = this.size.height;
     this.addChild(this.background);
 
-    this.sprite = new PIXI.Sprite();
-    this.sprite.position = new PIXI.Point(this.size.width / 2, this.size.height / 2);
-    this.sprite.anchor = new PIXI.Point(0.5, 0.5);
-    this.addChild(this.sprite);
+    this.pool = [];
+    for (let i = 0; i < POOL_SIZE; i++) {
+      this.pool[i] = new PIXI.Sprite();
+      this.pool[i].position = new PIXI.Point(this.size.width / 2, this.size.height / 2);
+      this.pool[i].anchor = new PIXI.Point(0.5, 0.5);
+      this.addChild(this.pool[i]);
+    }
+
+    this.idx = 0;
 
     this.ticker = new PIXI.Ticker();
     this.ticker.autoStart = true;
     this.ticker.add(() => {
-      this.sprite.scale.x += 0.0005;
-      this.sprite.scale.y += 0.0005;
+      this.pool[this.idx].scale.x += 0.0001;
+      this.pool[this.idx].scale.y += 0.0001;
     });
   }
 
   play(texture: PIXI.Texture, pos = 0) {
+    const currentIdx = this.idx;
+    const nextIdx = (this.idx + 1) % POOL_SIZE;
+
+    this.pool[nextIdx].texture = texture;
+    this.pool[nextIdx].scale.x = 1;
+    this.pool[nextIdx].scale.y = 1;
+
+    const scale = Math.max(this.size.width / this.pool[nextIdx].width, this.size.height / this.pool[nextIdx].height);
+    this.pool[nextIdx].scale.x = scale;
+    this.pool[nextIdx].scale.y = scale;
+
+    this.pool[nextIdx].alpha = 0;
+
     this.timeline
-      .to(this.sprite, {
-        duration: 0.5,
+      .to(this.pool[currentIdx], {
+        duration: TRANSITION_TIME,
         pixi: {
           alpha: 0,
         },
-        onStart: () => {
-          this.sprite.alpha = 1;
-        },
       }, pos)
-      .to(this.sprite, {
-        duration: 3,
+      .to(this.pool[nextIdx], {
+        duration: TRANSITION_TIME,
         pixi: {
           alpha: 1,
         },
-        onStart: () => {
-          this.sprite.texture = texture;
-          this.sprite.scale.x = 1;
-          this.sprite.scale.y = 1;
+      }, pos);
 
-          const scale = Math.max(this.size.width / this.sprite.width, this.size.height / this.sprite.height);
-          this.sprite.scale.x = scale;
-          this.sprite.scale.y = scale;
-
-          this.sprite.alpha = 0;
-        }
-      }, pos + 0.5);
+    this.idx = nextIdx;
   }
 }

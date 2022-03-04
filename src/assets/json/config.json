@@ -1,0 +1,10 @@
+{
+  "groomName": "foo",
+  "brideName": "bar",
+  "cast": {
+    "photo": [
+      "boy.png",
+      "soup.png"
+    ]
+  }
+}

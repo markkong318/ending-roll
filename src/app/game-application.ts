@@ -7,8 +7,8 @@ import {Application} from '../framework/application';
 import Bottle from '../framework/bottle';
 import LayoutManager from '../framework/manager/layout-manager';
 import {Storage} from './storage/storage';
-import boy from '../../src/assets/images/boy.png';
-import soup from '../../src/assets/images/soup.png';
+import images from '../../src/assets/images/*.png';
+import config from '../../src/assets/json/config.json';
 
 export class GameApplication extends Application {
   private gameModel: GameModel;
@@ -16,7 +16,6 @@ export class GameApplication extends Application {
   private gameView: GameView;
   private storage: Storage;
   private layoutManager: LayoutManager;
-  private sprite: PIXI.Sprite;
 
   constructor(options?) {
     super(options);
@@ -24,9 +23,16 @@ export class GameApplication extends Application {
   }
 
   public preload(): void {
+    const resources = [];
+    for (const [k, v] of Object.entries(images)) {
+      resources.push({
+        name: k,
+        url: v,
+      });
+    }
+
     this.loader
-      .add('boy', boy)
-      .add('soup', soup)
+      .add(resources)
       .load((loader, resources) => {
         this.onAssetsLoaded();
       });
@@ -56,9 +62,6 @@ export class GameApplication extends Application {
 
     this.gameView.init();
     this.stage.addChild(this.gameView);
-
-    // this.sprite = new PIXI.Sprite(PIXI.Texture.from('boy'));
-    // this.gameView.addChild(this.sprite);
 
     console.log('hello game');
   }

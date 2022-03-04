@@ -7,7 +7,7 @@ It supports
 - Two fingers resize for large puzzle
 - Auto save
 
-![img.png](img.png)
+
 
 Game which is forked from `parcel-pixijs-quickstarter` and apply MVC
 
