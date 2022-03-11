@@ -9,6 +9,8 @@ const FONT_SIZE = {
   small: 0,
 }
 
+const TRANSITION_TIME = 2.5;
+
 export class TitleView extends View {
   private background: PIXI.Sprite;
   private title: PIXI.Text;
@@ -71,7 +73,7 @@ export class TitleView extends View {
 
     this.timeline
       .to(this.title, {
-        duration: 0.5,
+        duration: TRANSITION_TIME,
         pixi: {
           alpha: 0,
         },
@@ -80,7 +82,7 @@ export class TitleView extends View {
         },
       }, pos)
       .to(this.title, {
-        duration: 3,
+        duration: TRANSITION_TIME,
         pixi: {
           alpha: 1,
         },
@@ -91,6 +93,6 @@ export class TitleView extends View {
           this.title.style.fontSize = fontSize;
 
         }
-      }, pos + 0.5);
+      }, pos + TRANSITION_TIME);
   }
 }

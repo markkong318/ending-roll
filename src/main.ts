@@ -7,7 +7,10 @@ import {GameApplication} from './app/game-application';
 
 declare global {
   interface Window {
-    PIXI:any;
+    PIXI: any;
+    YT: any;
+    onYouTubeIframeAPIReady: any;
+    Player: any;
   }
 }
 

@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import {View} from '../../../framework/view';
 
 const POOL_SIZE = 2;
-const TRANSITION_TIME = 2;
+const TRANSITION_TIME = 5;
 
 export class PhotoView extends View {
   private background: PIXI.Sprite;

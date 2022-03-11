@@ -8,11 +8,9 @@ export class Youtube {
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // @ts-ignore
     window.onYouTubeIframeAPIReady = () => {
       console.log('call onYouTubeIframeAPIReady')
-      // @ts-ignore
-      window.player2 = new window.YT.Player('player', {
+      window.Player = new window.YT.Player('player', {
         height: '360',
         width: '640',
         videoId: 'dRgz1DrRhH0',
@@ -24,25 +22,18 @@ export class Youtube {
     };
 
 
-    // 4. The API will call this function when the video player is ready.
     function onPlayerReady(event) {
       console.log('onPlayerReady');
       // event.target.playVideo();
-
-
-
-      // player.mute();
     }
 
     function onPlayerStateChange(event) {
-      var playerDiv = document.getElementById('player');
+      const playerDiv = document.getElementById('player');
 
       switch (event.data) {
-        // @ts-ignore
         case window.YT.PlayerState.PAUSED:
           playerDiv.style.display = "none";
           break;
-        // @ts-ignore
         case window.YT.PlayerState.PLAYING:
           playerDiv.style.display = "none";
           break;
@@ -51,17 +42,15 @@ export class Youtube {
   }
 
   play() {
-    // @ts-ignore
-    window.player2.playVideo();
+    window.Player.playVideo();
+    window.Player.playVideo();
   }
 
   stop() {
-    // @ts-ignore
-    window.player2.stopVideo();
+    window.Player.stopVideo();
   }
 
   getCurrentTime() {
-    // @ts-ignore
-    return window.player2.getCurrentTime();
+    return window.Player.getCurrentTime();
   }
 }

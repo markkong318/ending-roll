@@ -1,6 +1,6 @@
 import bottle from './bottle';
 
-export class Model {
+export class Storage {
   constructor() {
     bottle.set(this.constructor.name, this);
   }

@@ -50,13 +50,10 @@ export class CastView extends View {
 
     this.ticker = new PIXI.Ticker();
     this.ticker.autoStart = true;
-
-    this.on('click', () => {
-      console.log('cast')
-    });
   }
 
-  play(text: string, pos: number = 0) {
+
+  playMessage(text: string, pos: number = 0) {
     const line = this.pool.shift();
     if (!line) {
       throw new Error('No available line');
